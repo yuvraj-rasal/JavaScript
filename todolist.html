@@ -53,18 +53,18 @@
     </nav>
     <div class="container my-4">
         <h2 class="text-center">TODOs List</h2>
-        <form>
+        
             <div class="form-group">
               <label for="title">Title</label>
               <input type="text" class="form-control" id="title" aria-describedby="emailHelp" >
               <small id="emailHelp" class="form-text text-muted">Add an item to the List .</small>
             </div>
             <div class="form-group">
-                <label for="descrription">Descrription</label>
-                <textarea class="form-control" id="descrription" rows="3"></textarea>
+                <label for="description">Descrription</label>
+                <textarea class="form-control" id="description" rows="3"></textarea>
               </div>
-            <button type="submit" class="btn btn-primary">Add to List</button>
-          </form>
+            <button type="submit" id="add" class="btn btn-primary">Add to List</button>
+         
           <div id="items" class="my-4">
             <h2>Your Items</h2>
             <table class="table">
@@ -76,7 +76,7 @@
                     <th scope="col">Actions</th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody id="tablebody">
                   <tr>
                     <th scope="row">1</th>
                     <td>Get some Coffee</td>
@@ -100,6 +100,39 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
         integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
         crossorigin="anonymous"></script>
+        <script>
+            add = document.getElementById("add");
+            add.addEventListener("click", ()=>{
+                tit = document.getElementById('title').value;
+                desc = document.getElementById('description').value;
+
+                if(localStorage.getItem('itemsJson')==null){
+                    console.log("list updating............")
+                    itemJsonArray=[];
+                    itemJsonArray.push([tit,desc]);
+                    localStorage.setItem('itemsJson',JSON.stringify(itemJsonArray));
+                }
+                else{
+                    console.log("list updating............")
+                    itemJsonArrayStr=localStorage.getItem('itemsJson');
+                    itemJsonArray=JSON.parse(itemJsonArrayStr);
+                    itemJsonArray.push([tit,desc]);
+                    localStorage.setItem('itemsJson',JSON.stringify(itemJsonArray)); 
+                }
+                let tablebody=document.getElementById("tablebody");
+                let str ="";
+                itemJsonArray.forEach((element,index) => {
+                    str += `
+                    <tr>
+                    <th scope="row">${index}</th>
+                    <td>${element[0]}</td>
+                    <td>${element[1]}</td>
+                    <td><button class="btn-sm btn-primary">Delete</button></td>
+                    </tr>`;
+                });
+                tablebody.innerHTML=str;
+            });
+        </script>
 </body>
 
 </html>
